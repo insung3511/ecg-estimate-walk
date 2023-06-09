@@ -1,7 +1,10 @@
+from scipy.signal import find_peaks
 from ecgdetectors import Detectors
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import peakutils
 
 class DataConcate:
     def dataconcate(self, *args):
@@ -54,19 +57,25 @@ class DataLoader:
 
         return exported_signal
 
-    def export_ecg_30sec(self, signal, samp_rate: int = 250):
+    def export_ecg_30sec(self, org_signal, samp_rate: int = 250):
         thirty_sec = samp_rate * 30
-        cnt = int(len(signal) / thirty_sec)
-        detectors = Detectors(samp_rate)
+        cnt = int(len(org_signal) / thirty_sec)
 
         exported_signal = list()
         for i in range(cnt):
             start = i * thirty_sec
             end = (i + 1) * thirty_sec
-            if i == cnt - 1: end = len(signal)
+
+            if i == cnt - 1: 
+                end = len(signal)
             
-            if end - start == thirty_sec: exported_signal.append(signal[start:end] ** 2)
-            else: break
+            if end - start == thirty_sec and org_signal[start:end].shape[0] == thirty_sec:
+                signal = org_signal[start:end] ** 2
+                baseline = peakutils.baseline(signal)
+                exported_signal.append(baseline)
+
+            else: 
+                break
 
         return exported_signal 
     
