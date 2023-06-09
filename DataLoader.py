@@ -70,9 +70,8 @@ class DataLoader:
                 end = len(signal)
             
             if end - start == thirty_sec and org_signal[start:end].shape[0] == thirty_sec:
-                signal = org_signal[start:end] ** 2
-                baseline = peakutils.baseline(signal)
-                exported_signal.append(baseline)
+                signal = np.array(org_signal[start:end]) ** 2
+                exported_signal.append(signal)
 
             else: 
                 break
