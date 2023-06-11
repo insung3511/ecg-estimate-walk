@@ -57,6 +57,27 @@ class DataLoader:
 
         return exported_signal
 
+    def raw_export_ecg_30sec(self, org_signal, samp_rate: int = 250):
+        thirty_sec = samp_rate * 30
+        cnt = int(len(org_signal) / thirty_sec)
+
+        exported_signal = list()
+        for i in range(cnt):
+            start = i * thirty_sec
+            end = (i + 1) * thirty_sec
+
+            if i == cnt - 1: 
+                end = len(signal)
+            
+            if end - start == thirty_sec and org_signal[start:end].shape[0] == thirty_sec:
+                signal = org_signal[start:end]
+                exported_signal.append(signal)
+
+            else: 
+                break
+
+        return exported_signal 
+ 
     def export_ecg_30sec(self, org_signal, samp_rate: int = 250):
         thirty_sec = samp_rate * 30
         cnt = int(len(org_signal) / thirty_sec)
