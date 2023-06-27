@@ -1,3 +1,4 @@
+from DataFiltering import DataFiltering
 from scipy.signal import find_peaks
 from ecgdetectors import Detectors
 
@@ -12,6 +13,9 @@ class DataConcate:
         return concated_data
 
 class DataLoader:
+    def __init__(self):
+        self.filter = DataFiltering(sampling_rate=250)
+
     def dataload(self, data_path):
         if 'mobile' in data_path:   
             print("MOBILE", data_path)
@@ -91,8 +95,8 @@ class DataLoader:
                 end = len(signal)
             
             if end - start == thirty_sec and org_signal[start:end].shape[0] == thirty_sec:
-                signal = org_signal[start:end] ** 2
-                exported_signal.append(signal)
+                signal = org_signal[start:end]
+                exported_signal.append(signal ** 2)
 
             else: 
                 break
