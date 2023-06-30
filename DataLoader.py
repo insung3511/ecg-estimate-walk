@@ -40,26 +40,6 @@ class DataLoader:
         heart_rate = df.loc[:, 1].to_numpy().flatten()
 
         return ecg, rsp, acc_x, acc_y, acc_z, heart_rate
-    
-    def is_over_1min(self, signal, one_min_samp_rate: int):
-        if len(signal) >= one_min_samp_rate: return True
-        else: return False
-
-    def export_ecg_1min(self, signal, samp_rate: int = 250):
-        one_min = samp_rate * 60
-        cnt = int(len(signal) / one_min)
-        detectors = Detectors(samp_rate)
-
-        exported_signal = list()
-        for i in range(cnt):
-            start = i * one_min
-            end = (i + 1) * one_min
-            if i == cnt - 1: end = len(signal)
-            
-            if end - start == one_min: exported_signal.append(signal[start:end] ** 2)
-            else: break
-
-        return exported_signal
 
     def raw_export_ecg_30sec(self, org_signal, samp_rate: int = 250):
         thirty_sec = samp_rate * 30
@@ -102,21 +82,6 @@ class DataLoader:
                 break
 
         return exported_signal 
-    
-    def export_acc_1min(self, signal, samp_rate: int = 25):
-        one_min = samp_rate * 60
-        cnt = int(len(signal) / one_min)
-
-        exported_signal = list()
-        for i in range(cnt):
-            start = i * one_min
-            end = (i + 1) * one_min
-            if i == cnt - 1: end = len(signal)
-
-            if end - start == one_min: exported_signal.append(signal[start:end])
-            else: break
-
-        return exported_signal
     
     def export_acc_30sec(self, signal, samp_rate: int = 25):
         thirty_sec = samp_rate * 30
